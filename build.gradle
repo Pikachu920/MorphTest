@@ -1,0 +1,30 @@
+apply plugin: 'java'
+
+group 'MorphTest'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile group: 'org.javassist', name: 'javassist', version: '3.15.0-GA'
+}
+
+jar {
+    manifest {
+        attributes (
+                'Main-Class': 'com.eric.morphtest.Main',
+                'Agent-Class': 'com.eric.morphtest.ScriptExecutionController',
+                'Premain-Class': 'com.eric.morphtest.ScriptExecutionController',
+                'Can-Redefine-Classes': 'true'
+        )
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
