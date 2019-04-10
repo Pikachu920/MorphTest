@@ -19,10 +19,14 @@ public final class ScriptExecutionController {
         throw new IllegalStateException(getClass().getSimpleName() + " may not be instantiated");
     }
 
-    public static void setup() {
+    private static void checkForAgent() {
         if (instrumentation == null) {
-            throw new IllegalStateException("Instrumentation not set!");
+            throw new IllegalStateException("Instrumentation instance is null");
         }
+    }
+
+    public static void setup() {
+        checkForAgent();
 
         ClassPool pool = ClassPool.getDefault();
         try {
@@ -50,10 +54,12 @@ public final class ScriptExecutionController {
     }
 
     public static void setExecutionEnabled(boolean enabled) {
+        checkForAgent();
         executionEnabled = enabled;
     }
 
     public static boolean isExecutionEnabled() {
+        checkForAgent();
         return executionEnabled;
     }
 
